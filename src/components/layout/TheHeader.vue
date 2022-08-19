@@ -6,13 +6,37 @@
         <li>
           <router-link to="/coaches">All Coaches</router-link>
         </li>
-        <li>
+        <li v-if="isAuth">
           <router-link to="/requests">All Requests</router-link>
+        </li>
+        <li v-else>
+          <router-link to="/auth?redirect=coaches">Login</router-link>
+        </li>
+        <li v-if="isAuth">
+          <base-button @click="logout">Logout</base-button>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+import BaseButton from "../ui/BaseButton.vue";
+export default {
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.replace("/coaches");
+    },
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+  components: { BaseButton },
+};
+</script>
 
 <style scoped>
 header {
